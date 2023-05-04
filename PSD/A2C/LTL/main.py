@@ -30,7 +30,7 @@ class ActorCritic(nn.Module):
 
 
 # Plot rewards function
-def plot_rewards(rewards, interval=100):
+def plot_rewards(rewards, learn=True, interval=100):
     n = len(rewards)
     running_avg = np.empty(n)
 
@@ -41,6 +41,10 @@ def plot_rewards(rewards, interval=100):
     plt.plot(running_avg)
     plt.xlabel('Episode')
     plt.ylabel('Total Reward')
+    if learn:
+        plt.savefig('learn.png')
+    else:
+        plt.savefig('evaluate.png')
     plt.show()
 
 
@@ -126,7 +130,7 @@ def main():
     state_dim = env.observation_space.shape[0]
     action_dim = env.action_space.n
 
-    num_episodes = 2000
+    num_episodes = 1000
     gamma = 0.99
     learning_rate = 0.0001
 
@@ -145,7 +149,7 @@ def main():
     torch.save(model.state_dict(), 'model_01.pth')
 
     # Plot training rewards
-    plot_rewards(episode_rewards)
+    plot_rewards(episode_rewards, learn=True)
 
     # Load the trained model and evaluate it
     trained_model = ActorCritic(state_dim, action_dim)
@@ -163,7 +167,7 @@ def main():
         f.write(json.dumps(env.traces) + '\n')
 
     # Plot evaluation rewards
-    plot_rewards(eval_episode_rewards)
+    plot_rewards(eval_episode_rewards, learn=False)
 
     f.close()
     env.close()

@@ -1,0 +1,26 @@
+const int N;
+
+filter(avg, R{"step"}=? [ F stuck&!open ], "s0")
+
+filter(avg, R{"step"}=? [ F force&!open ], "s0")
+
+filter(avg, R{"step"}=? [ F !arrived&open ], "s0")
+
+filter(avg, R{"step"}=? [ F moving&open ], "s0")
+
+filter(avg, R{"step"}=? [ F stuck&close ], "s0")
+
+filter(avg, R{"step"}=? [ F close ], emergency)
+
+filter(avg, P=? [ F<=2 stuck&!open ], "s0")
+
+filter(avg, P=? [ F<=2 force&!open ], "s0")
+
+filter(avg, P=? [ F<=2 !arrived&open ], "s0")
+
+filter(avg, P=? [ F<=2 moving&open ], "s0")
+
+filter(avg, P=? [ F<=2 stuck&close ], "s0")
+
+filter(avg, P=? [ F<=2 close ], emergency)
+

@@ -29,7 +29,7 @@ class ActorCritic(nn.Module):
         return self.actor(x), self.critic(x)
 
 
-def plot_rewards(rewards, interval=100):
+def plot_rewards(rewards, learn=True, interval=100):
     n = len(rewards)
     running_avg = np.empty(n)
 
@@ -40,10 +40,14 @@ def plot_rewards(rewards, interval=100):
     plt.plot(running_avg)
     plt.xlabel('Episode')
     plt.ylabel('Total Reward')
+    if learn:
+        plt.savefig('learn.png')
+    else:
+        plt.savefig('evaluate.png')
     plt.show()
 
 
-def do_post_process(self, trace):
+def do_post_process(trace):
     trace['x'].pop()
     trace['y'].pop()
     trace['xv'].pop()
@@ -134,14 +138,23 @@ def evaluate(f, env, model, n_episodes):
             'av': [(0, state[5])],
             'l': [(0, state[6])],
             'r': [(0, state[7])],
-            'act': [],
+            'not': [],
+            'le': [],
+            'me': [],
+            're': [],
+            'aux0': [(0, True)],
         }
 
         while not done:
+            # env.render()
             state_tensor = torch.FloatTensor(state)
             action_probs, _ = model(state_tensor)
             action = torch.argmax(action_probs)
-            trace['act'].append((len(trace['act']), action.item()))
+            trace['not'].append((len(trace['not']), True if action.item() == 0 else False))
+            trace['le'].append((len(trace['le']), True if action.item() == 1 else False))
+            trace['me'].append((len(trace['me']), True if action.item() == 2 else False))
+            trace['re'].append((len(trace['re']), True if action.item() == 3 else False))
+            trace['aux0'].append((len(trace['aux0']), True))
             next_state, reward, done, _ = env.step(action.item())
 
             state = next_state
@@ -159,7 +172,15 @@ def evaluate(f, env, model, n_episodes):
         print(f"Episode {episode}, Episode Reward: {episode_reward}")
         episode_rewards.append(episode_reward)
         do_post_process(trace)
-        f.write(str(trace) + '\n')
+        for key in trace.keys():
+            var_trace = trace[key][:]
+            if isinstance(var_trace[0][1], np.float32):
+                trace[key].clear()
+                for idx, item in enumerate(var_trace):
+                    trace[key].append((idx, float(item[1])))
+            else:
+                continue
+        f.write(json.dumps(trace) + '\n')
 
     return episode_rewards
 
@@ -171,16 +192,16 @@ def main():
     gamma = 0.99
     n_steps = 5
     max_episodes = 10000
-    episode_rewards = train(env, model, optimizer, gamma, n_steps, max_episodes)
-    plot_rewards(episode_rewards, interval=100)
+    # episode_rewards = train(env, model, optimizer, gamma, n_steps, max_episodes)
+    # plot_rewards(episode_rewards, learn=True, interval=100)
     # Load the trained model and evaluate it
     trained_model = ActorCritic(env.observation_space.shape[0], env.action_space.n, 128)
     trained_model.load_state_dict(torch.load('model_01.pth'))
     trained_model.eval()
     f = open('traces_01.json', 'w')
-    episode_rewards = evaluate(f, env, trained_model, 100)
+    episode_rewards = evaluate(f, env, trained_model, 10)
     f.close()
-    plot_rewards(episode_rewards, interval=100)
+    plot_rewards(episode_rewards, learn=False, interval=100)
 
 
 if __name__ == '__main__':
