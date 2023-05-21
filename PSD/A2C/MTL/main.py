@@ -71,7 +71,7 @@ def train_one_episode(env, model, optimizer, gamma, state_dim):
     total_reward = 0
     cnt = 0
 
-    while cnt < 50:
+    while cnt < 100:
         state_tensor = one_hot_encoding(state, state_dim)
         action_probs, state_value = model(state_tensor)
         action = choose_action(action_probs)
@@ -98,7 +98,6 @@ def train_one_episode(env, model, optimizer, gamma, state_dim):
         if done:
             break
 
-    env.do_post_process()
     return total_reward
 
 
@@ -107,7 +106,7 @@ def evaluate_one_episode(env, model, state_dim):
     total_reward = 0
     cnt = 0
 
-    while cnt < 50:
+    while cnt < 100:
         state_tensor = one_hot_encoding(state, state_dim)
         action_probs, _ = model(state_tensor)
         action = choose_action(action_probs)
@@ -121,7 +120,6 @@ def evaluate_one_episode(env, model, state_dim):
         if done:
             break
 
-    env.do_post_process()
     return total_reward
 
 
@@ -131,9 +129,9 @@ def main():
     state_dim = env.observation_space.shape[0]
     action_dim = env.action_space.n
 
-    num_episodes = 1000
+    num_episodes = 300
     gamma = 0.99
-    learning_rate = 0.0001
+    learning_rate = 0.00005
 
     # 모델 및 최적화기 초기화
     model = ActorCritic(state_dim, action_dim)

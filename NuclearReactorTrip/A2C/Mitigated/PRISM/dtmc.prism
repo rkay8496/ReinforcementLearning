@@ -1,0 +1,27 @@
+dtmc
+
+module NuclearReactorTrip
+	
+	state : [-1..3];
+	action : [-1..3];
+
+	[] (state = 0) & (action = -1) -> 200/400:(state' = -1) & (action' = -1) + 199/400:(state' = 1) & (action' = 0) + 1/400:(state' = 1) & (action' = 1);
+	[] (state = -1) & (action = -1) -> 200/20178:(state' = 0) & (action' = -1) + 9899/20178:(state' = 1) & (action' = 0) + 9988/20178:(state' = 0) & (action' = 2) + 90/20178:(state' = 1) & (action' = 1) + 1/20178:(state' = 2) & (action' = 0);
+	[] (state = 1) & (action = 0) -> 9899/19798:(state' = -1) & (action' = -1) + 9898/19798:(state' = 0) & (action' = 2) + 1/19798:(state' = 2) & (action' = 0);
+	[] (state = 0) & (action = 2) -> 9988/19777:(state' = -1) & (action' = -1) + 9700/19777:(state' = 1) & (action' = 0) + 89/19777:(state' = 1) & (action' = 1);
+	[] (state = 1) & (action = 1) -> 90/180:(state' = -1) & (action' = -1) + 90/180:(state' = 0) & (action' = 2);
+	[] (state = 2) & (action = 0) -> 1/1:(state' = -1) & (action' = -1);
+endmodule
+
+label "safe" = ((state = 0) & (action = -1)) | ((state = 1) & (action = 0)) | ((state = 0) & (action = 2)) | ((state = 1) & (action = 1));
+label "fail" = ((state = 2) & (action = 0));
+label "s0" = (state = 0) & (action = -1);
+label "s2" = (state = 1) & (action = 0);
+label "s3" = (state = 0) & (action = 2);
+label "s4" = (state = 1) & (action = 1);
+label "s5" = (state = 2) & (action = 0);
+label "dummy1" = (state = -1) & (action = -1);
+
+rewards "step"
+	[] true : 1;
+endrewards

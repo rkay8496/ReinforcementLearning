@@ -27,6 +27,7 @@ def convert_to_traces(lines):
             'emergency': False,
             'close': False,
             'open': False,
+            '_safe': False,
             'is_dummy': True,
         }
         item = {}
@@ -44,10 +45,10 @@ def convert_to_traces(lines):
                 'emergency': obj['emergency'][i][1],
                 'close': obj['close'][i][1],
                 'open': obj['open'][i][1],
+                '_safe': obj['_safe'][i][1],
                 'is_dummy': False
             }
             path.append(item)
-        if obj['aux0']:
             path.append(dummy)
             path.append(item)
         converted.append(path)
@@ -157,7 +158,7 @@ def generate_prism_model(state_list):
     data += '\n'
     data += 'label \"safe\" = '
     for state in state_list:
-        if len(state['next']) > 0:
+        if state['_safe'] and not state['is_dummy']:
             data += '((force = ' + str(state['force']).lower() + ') & (arrived = ' + str(state['arrived']).lower() + \
                 ') & (moving = ' + str(state['moving']).lower() + \
                 ') & (closed = ' + str(state['closed']).lower() + ') & (opened = ' + str(state['opened']).lower() + \
@@ -168,7 +169,7 @@ def generate_prism_model(state_list):
     data += ';\n'
     data += 'label \"fail\" = '
     for state in state_list:
-        if len(state['next']) == 1 and state['next'][0]['is_dummy']:
+        if not state['_safe'] and not state['is_dummy']:
             data += '((force = ' + str(state['force']).lower() + ') & (arrived = ' + str(state['arrived']).lower() + \
                 ') & (moving = ' + str(state['moving']).lower() + \
                 ') & (closed = ' + str(state['closed']).lower() + ') & (opened = ' + str(state['opened']).lower() + \

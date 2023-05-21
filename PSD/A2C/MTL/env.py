@@ -116,19 +116,15 @@ class PSD(gym.Env):
         while not computed:
             computed = compute_observation()
             cnt += 1
-            if cnt == 1000 and not computed:
-                break
-        self.traces['aux0'].append((len(self.traces['aux0']), computed))
         return computed
 
     def step(self, action):
+        self.take_env()
+        obs = np.array(self.observation)
+
         self.action = action
         self.traces['close'].append((len(self.traces['close']), True if action == 0 else False))
         self.traces['open'].append((len(self.traces['open']), True if action == 1 else False))
-
-        computed = self.take_env()
-        if not computed:
-            return np.array(self.observation), 0, True, {}
 
         obs = np.array(self.observation)
 
@@ -159,6 +155,7 @@ class PSD(gym.Env):
         elif not safety_eval and not liveness_eval:
             done = True
             info['satisfiable'] = False
+        self.traces['_safe'].append((len(self.traces['_safe']), not done))
         return obs, reward, done, info
 
     def reset(self):
@@ -173,21 +170,9 @@ class PSD(gym.Env):
             'emergency': [(0, False)],
             'close': [(0, False)],
             'open': [(0, True)],
-            'aux0': [(0, True)],
+            '_safe': [(0, True)]
         }
-        self.take_env()
-        return np.array(self.observation)
-
-    def do_post_process(self):
-        self.traces['force'].pop()
-        self.traces['arrived'].pop()
-        self.traces['moving'].pop()
-        self.traces['closed'].pop()
-        self.traces['opened'].pop()
-        self.traces['stuck'].pop()
-        self.traces['obstacle'].pop()
-        self.traces['emergency'].pop()
-
+        return np.array([0, 1, 0, 1, 0, 0, 0, 0])
 
     def render(self):
         if self.render_mode == "human":

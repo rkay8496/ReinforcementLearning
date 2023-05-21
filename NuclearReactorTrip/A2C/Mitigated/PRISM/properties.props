@@ -1,0 +1,4 @@
+filter(avg, R{"step"}=?[F "fail"], "safe")
+
+filter(avg, S=?["fail"], "safe")
+

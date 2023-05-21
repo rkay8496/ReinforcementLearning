@@ -74,6 +74,7 @@ def train(env, model, optimizer, gamma, n_steps, max_episodes):
             action_dist = Categorical(action_probs)
             action = action_dist.sample()
 
+            print(action)
             next_state, reward, done, _ = env.step(action.item())
             next_state = torch.FloatTensor(next_state)
 
@@ -192,8 +193,8 @@ def main():
     gamma = 0.99
     n_steps = 5
     max_episodes = 10000
-    # episode_rewards = train(env, model, optimizer, gamma, n_steps, max_episodes)
-    # plot_rewards(episode_rewards, learn=True, interval=100)
+    episode_rewards = train(env, model, optimizer, gamma, n_steps, max_episodes)
+    plot_rewards(episode_rewards, learn=True, interval=100)
     # Load the trained model and evaluate it
     trained_model = ActorCritic(env.observation_space.shape[0], env.action_space.n, 128)
     trained_model.load_state_dict(torch.load('model_01.pth'))

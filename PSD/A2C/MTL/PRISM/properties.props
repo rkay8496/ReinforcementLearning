@@ -12,15 +12,15 @@ filter(avg, R{"step"}=? [ F stuck&close ], "s0")
 
 filter(avg, R{"step"}=? [ F close ], emergency)
 
-filter(avg, P=? [ F<=2 stuck&!open ], "s0")
+filter(avg, S=? [ stuck&!open ], "s0")
 
-filter(avg, P=? [ F<=2 force&!open ], "s0")
+filter(avg, S=? [ force&!open ], "s0")
 
-filter(avg, P=? [ F<=2 !arrived&open ], "s0")
+filter(avg, S=? [ !arrived&open ], "s0")
 
-filter(avg, P=? [ F<=2 moving&open ], "s0")
+filter(avg, S=? [ moving&open ], "s0")
 
-filter(avg, P=? [ F<=2 stuck&close ], "s0")
+filter(avg, S=? [ stuck&close ], "s0")
 
-filter(avg, P=? [ F<=2 close ], emergency)
+filter(avg, S=? [ close ], emergency)
 
