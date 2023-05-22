@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import matplotlib.pyplot as plt
-from PSD.A2C.LTL.env import PSD
+from env import PSD
 
 # 신경망 정의 (Actor-Critic)
 class ActorCritic(nn.Module):
