@@ -45,7 +45,7 @@ def plot_rewards(rewards, learn=True, interval=100):
     if learn:
         plt.savefig('learn.png')
     else:
-        plt.savefig('evaluate.png')
+        plt.savefig('evaluate_8_1.png')
     plt.show()
 
 
