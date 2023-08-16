@@ -29,49 +29,57 @@ def plot_rewards(rewards, img_name, interval=100):
 
 
 def main():
-    settings = [(8, 1), (8, 2), (16, 5), (16, 6), (24, 9), (24, 10), (32, 13), (32, 14), (48, 21), (48, 22), (64, 29), (64, 30)]
+    # settings = [(8, 1), (8, 2), (16, 5), (16, 6), (24, 9), (24, 10), (32, 13), (32, 14), (48, 21), (48, 22), (64, 29), (64, 30)]
+    timesteps = [3e4, 4e4, 5e4, 6e4, 7e4]
+    learning_rates = [1e-4, 2e-4, 3e-4, 4e-4, 5e-4]
 
-    for item in settings:
-        size = item[0]
-        glitches = item[1]
-        global_name = 'ppo_moving_obstacle_' + str(size) + '_' + str(glitches)
-        print(global_name + '>>>>>>>>>>>>>>>>>>>>>>>>>>')
+    for timestep in timesteps:
+        for lr in learning_rates:
+    # for item in settings:
+            size = 8
+            glitches = 1
+            # global_name = 'ppo_moving_obstacle_' + str(size) + '_' + str(glitches)
+            global_name = 'ppo_moving_obstacle' + '_' + str(timestep) + '_' + str(lr)
+            print(global_name + '>>>>>>>>>>>>>>>>>>>>>>>>>>')
 
-        train = True
+            train = False
 
-        # Create environment
-        env = MovingObstacleEnv(size=size, glitches=glitches, train=train, global_name=global_name)
+            # Create environment
+            env = MovingObstacleEnv(size=size, glitches=glitches, train=train, global_name=global_name)
 
-        if train:
-            # Instantiate the agent
-            model = PPO("MlpPolicy", env, verbose=1,
-                        device=torch.device('mps:0' if torch.backends.mps.is_available() else 'cpu'))
-            # Train the agent and display a progress bar
-            model.learn(total_timesteps=int(5e4), progress_bar=True)
-            # Save the agent
-            model.save(global_name)
-            del model  # delete trained model to demonstrate loading
-        else:
-            # Load the trained agent
-            model = PPO.load(global_name, env=env)
+            if train:
+                # Instantiate the agent
+                model = PPO("MlpPolicy", env, verbose=1, learning_rate=lr,
+                            tensorboard_log="models/",
+                            device=torch.device('mps:0' if torch.backends.mps.is_available() else 'cpu'))
+                # Train the agent and display a progress bar
+                model.learn(total_timesteps=int(timestep), progress_bar=True)
+                # Save the agent
+                # model.save(global_name)
+                model.save('models/' + global_name)
+                del model  # delete trained model to demonstrate loading
+            else:
+                # Load the trained agent
+                # model = PPO.load(global_name, env=env)
+                model = PPO.load("models/" + global_name, env=env)
 
-            # Enjoy trained agent
-            vec_env = model.get_env()
-            num_eval_episodes = 100
-            eval_episode_rewards = []
-            for i in range(num_eval_episodes):
-                obs = vec_env.reset()
-                total_reward = 0
-                while True:
-                    action, _states = model.predict(obs, deterministic=True)
-                    obs, rewards, dones, info = vec_env.step(action)
-                    total_reward += rewards[0]
-                    if dones[0]:
-                        eval_episode_rewards.append(total_reward)
-                        break
-                    # vec_env.render()
-            plot_rewards(eval_episode_rewards, global_name)
-            vec_env.close()
+                # Enjoy trained agent
+                vec_env = model.get_env()
+                num_eval_episodes = 100
+                eval_episode_rewards = []
+                for i in range(num_eval_episodes):
+                    obs = vec_env.reset()
+                    total_reward = 0
+                    while True:
+                        action, _states = model.predict(obs, deterministic=True)
+                        obs, rewards, dones, info = vec_env.step(action)
+                        total_reward += rewards[0]
+                        if dones[0]:
+                            eval_episode_rewards.append(total_reward)
+                            break
+                        # vec_env.render()
+                plot_rewards(eval_episode_rewards, global_name)
+                vec_env.close()
 
 
 if __name__ == '__main__':

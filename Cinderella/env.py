@@ -26,55 +26,41 @@ class CinderellaEnv(gym.Env):
         self.action_space = spaces.MultiDiscrete([2] * self.number_buckets)
 
         # Define the observation space:
-        self.observation_space = spaces.MultiDiscrete([self.bucket_capacity] * self.number_buckets)
+        self.observation_space = spaces.MultiDiscrete([self.bucket_capacity + self.added_units + 1] *
+                                                      self.number_buckets)
 
         # Define the initial state
         self.state, _ = self.reset()
 
-        self.trace = {
-            'observations': [],
-            'actions': [],
-            '_safe': [],
-        }
+        if not self.train:
+            self.trace = {
+                'observations': [],
+                'actions': [],
+                '_safe': [],
+            }
 
     def reset(self, seed=5345):
         while True:
             self.state = self.observation_space.sample()
             if sum(self.state) == self.added_units:
                 break
-        self.trace = {
-            'observations': [
-                copy.deepcopy(self.state)
-            ],
-            'actions': [
+        if not self.train:
+            self.trace = {
+                'observations': [
+                    copy.deepcopy(self.state)
+                ],
+                'actions': [
 
-            ],
-            '_safe': [
-                True
-            ],
-        }
+                ],
+                '_safe': [
+                    True
+                ],
+            }
         return self.state, {}
 
     def step(self, action):
-        self.trace['actions'].append(action)
-
-        self.find_adjacent_indices(self.number_buckets, [0, 2, 4])
-
-        self.update_agent(action)
-        self.robot_turn += 1
-
-        if self.robot_turn < 2:
-            if self.glitches_counter < self.glitches:
-                is_glitch = np.random.choice([True, False])
-                if is_glitch:
-                    self.update_obstacle_location()
-                    self.glitches_counter += 1
-                    self.robot_turn = 0
-        else:
-            self.update_obstacle_location()
-            self.robot_turn = 0
-
-        self.trace['observations'].append(copy.deepcopy(self.state))
+        if not self.train:
+            self.trace['actions'].append(action)
 
         terminated = False
         info = {
@@ -82,107 +68,75 @@ class CinderellaEnv(gym.Env):
         }
         reward = 0
 
-        if self.state[2] < 0 or self.state[2] > self.size - 1 or self.state[3] < 0 or self.state[3] > self.size - 1:
-            if self.state[2] < 0:
-                self.state[2] = 0
-            if self.state[2] > self.size - 1:
-                self.state[2] = self.size - 1
-            if self.state[3] < 0:
-                self.state[3] = 0
-            if self.state[3] > self.size - 1:
-                self.state[3] = self.size - 1
-            terminated = True
-            info['satisfiable'] = False
+        terminated = self.update_buckets(action)
+        if not self.train:
+            self.trace['observations'].append(copy.deepcopy(self.state))
+        info['satisfiable'] = not terminated
+        if not terminated:
             if not self.train:
-                for key in self.trace.keys():
-                    var_trace = self.trace[key][:]
-                    if key == 'observations':
-                        self.trace[key].clear()
-                        for idx, item in enumerate(var_trace):
-                            obj = []
-                            for elem in item:
-                                obj.append(int(elem))
-                            self.trace[key].append(obj)
-                    elif key == 'actions':
-                        self.trace[key].clear()
-                        for idx, item in enumerate(var_trace):
-                            self.trace[key].append(int(item))
                 self.trace['_safe'].append(not terminated)
-                self.f.write(json.dumps(self.trace) + '\n')
-            return self.state, reward, terminated, False, info
-
-        if (self.state[2] != self.state[0] or self.state[3] != self.state[1]) and \
-                (self.state[2] != self.state[0] + 1 or self.state[3] != self.state[1]) and \
-                (self.state[2] != self.state[0] or self.state[3] != self.state[1] + 1) and \
-                (self.state[2] != self.state[0] + 1 or self.state[3] != self.state[1] + 1):
             reward = 1
-            terminated = False
-            info['satisfiable'] = True
+
+        if not self.train and terminated:
+            for key in self.trace.keys():
+                var_trace = self.trace[key][:]
+                if key == 'observations':
+                    self.trace[key].clear()
+                    for idx, item in enumerate(var_trace):
+                        obj = []
+                        for elem in item:
+                            obj.append(int(elem))
+                        self.trace[key].append(obj)
+                elif key == 'actions':
+                    self.trace[key].clear()
+                    for idx, item in enumerate(var_trace):
+                        obj = []
+                        for elem in item:
+                            obj.append(int(elem))
+                        self.trace[key].append(obj)
             self.trace['_safe'].append(not terminated)
-        else:
-            terminated = True
-            info['satisfiable'] = False
-            if not self.train:
-                for key in self.trace.keys():
-                    var_trace = self.trace[key][:]
-                    if key == 'observations':
-                        self.trace[key].clear()
-                        for idx, item in enumerate(var_trace):
-                            obj = []
-                            for elem in item:
-                                obj.append(int(elem))
-                            self.trace[key].append(obj)
-                    elif key == 'actions':
-                        self.trace[key].clear()
-                        for idx, item in enumerate(var_trace):
-                            self.trace[key].append(int(item))
-                self.trace['_safe'].append(not terminated)
-                self.f.write(json.dumps(self.trace) + '\n')
+            self.f.write(json.dumps(self.trace) + '\n')
 
         return self.state, reward, terminated, False, info
 
-    def find_adjacent_indices(n, indices):
-        # 주어진 인덱스들을 오름차순으로 정렬합니다.
-        sorted_indices = sorted(indices)
+    def update_buckets(self, action):
+        if 1 not in action:
+            return True
 
-        # 인접한 인덱스를 저장할 리스트를 초기화합니다.
-        adjacent_indices = []
+        # A 배열에서 1인 값들의 인덱스를 찾습니다.
+        indices_of_ones = [i for i, value in enumerate(action) if value == 1]
 
-        # 모든 인덱스에 대해 반복합니다.
-        for i in range(len(sorted_indices)):
-            # 현재 인덱스와 다음 인덱스를 찾습니다.
-            current_index = sorted_indices[i]
-            next_index = sorted_indices[(i + 1) % len(sorted_indices)]
+        # 1인 값들의 인덱스가 j개 이하이고 서로 인접한지 확인합니다.
+        if len(indices_of_ones) > self.adjacent_buckets:
+            return True
 
-            # 만약 현재 인덱스와 다음 인덱스가 인접하다면, 이 두 인덱스를 adjacent_indices에 추가합니다.
-            if (next_index - current_index) % n == 1 or (current_index - next_index) % n == 1:
-                if current_index not in adjacent_indices:
-                    adjacent_indices.append(current_index)
-                if next_index not in adjacent_indices:
-                    adjacent_indices.append(next_index)
+        if indices_of_ones:
+            for i in range(len(indices_of_ones) - 1):
+                if (indices_of_ones[i + 1] - indices_of_ones[i]) % len(action) != 1:
+                    return True
+            # 배열의 첫 번째 원소와 마지막 원소가 인접한지 확인합니다.
+            if (indices_of_ones[0] - indices_of_ones[-1]) % len(action) != 1 and len(indices_of_ones) > 1:
+                return True
 
-        # 인접한 인덱스의 리스트를 반환합니다.
-        return adjacent_indices
+        # A 배열에서 1인 값들의 인덱스가 B 배열에서 동일한 인덱스의 값이 0보다 큰지 확인합니다.
+        for index in indices_of_ones:
+            if self.state[index] <= 0:
+                return True
 
-    def update_obstacle_location(self):
-        if self.state[0] > self.state[2]:
-            self.state[0] = max(0, self.state[0] - 1)
-        elif self.state[0] < self.state[2]:
-            self.state[0] = min(self.size - 2, self.state[0] + 1)
-        if self.state[1] > self.state[3]:
-            self.state[1] = max(0, self.state[1] - 1)
-        elif self.state[1] < self.state[3]:
-            self.state[1] = min(self.size - 2, self.state[1] + 1)
+        # A 배열에서 1인 값들의 인덱스에 해당하는 B 배열의 값들을 0으로 바꿉니다.
+        for index in indices_of_ones:
+            self.state[index] = 0
 
-    def update_agent(self, action):
-        if action == 1:
-            self.state[2] -= 1
-        elif action == 2:
-            self.state[2] += 1
-        elif action == 3:
-            self.state[3] -= 1
-        elif action == 4:
-            self.state[3] += 1
+        while True:
+            added = self.observation_space.sample()
+            if sum(added) == self.added_units:
+                self.state = [a + b for a, b in zip(self.state, added)]
+                break
+
+        for level in self.state:
+            if level > self.bucket_capacity:
+                return True
+        return False
 
     def do_post_process(self):
         pass

@@ -3,8 +3,8 @@ import os
 import json
 
 
-def read_file():
-    f = open('./ppo_moving_obstacle_64_30.json', 'r')
+def read_file(global_name):
+    f = open('./models/' + global_name + '.json', 'r')
     lines = f.readlines()
     f.close()
     return lines
@@ -109,8 +109,8 @@ def calculate_probabilities(converted):
     return state_list
 
 
-def generate_prism_model(state_list):
-    f = open('ppo_moving_obstacle_64_30.prism', 'w')
+def generate_prism_model(state_list, global_name):
+    f = open(global_name + '.prism', 'w')
     data = 'dtmc\n' \
             '\n' \
             'module MovingObstacle\n' \
@@ -175,7 +175,12 @@ def generate_prism_model(state_list):
     f.close
 
 
-lines = read_file()
-converted = convert_to_traces(lines)
-state_list = calculate_probabilities(converted)
-generate_prism_model(state_list)
+timesteps = [3e4, 4e4, 5e4, 6e4, 7e4]
+learning_rates = [1e-4, 2e-4, 3e-4, 4e-4, 5e-4]
+for timestep in timesteps:
+    for lr in learning_rates:
+        global_name = 'ppo_moving_obstacle' + '_' + str(timestep) + '_' + str(lr)
+        lines = read_file(global_name)
+        converted = convert_to_traces(lines)
+        state_list = calculate_probabilities(converted)
+        generate_prism_model(state_list, global_name)

@@ -4,7 +4,7 @@ import json
 
 
 def read_file():
-    f = open('./ppo_moving_obstacle_64_30.json', 'r')
+    f = open('./ppo_cinderella_5_10_5_2.json', 'r')
     lines = f.readlines()
     f.close()
     return lines
@@ -17,11 +17,16 @@ def convert_to_traces(lines):
         path = []
         dummy = {
             'No': -1,
-            'xo': -1,
-            'yo': -1,
-            'xr': -1,
-            'yr': -1,
-            'action': -1,
+            'b1': -1,
+            'b2': -1,
+            'b3': -1,
+            'b4': -1,
+            'b5': -1,
+            'c1': -1,
+            'c2': -1,
+            'c3': -1,
+            'c4': -1,
+            'c5': -1,
             '_safe': False,
             'is_dummy': True,
         }
@@ -30,22 +35,32 @@ def convert_to_traces(lines):
             if i == 0:
                 item = {
                     'No': -1,
-                    'xo': obj['observations'][i][0],
-                    'yo': obj['observations'][i][1],
-                    'xr': obj['observations'][i][2],
-                    'yr': obj['observations'][i][3],
-                    'action': -1,
+                    'b1': obj['observations'][i][0],
+                    'b2': obj['observations'][i][1],
+                    'b3': obj['observations'][i][2],
+                    'b4': obj['observations'][i][3],
+                    'b5': obj['observations'][i][4],
+                    'c1': -1,
+                    'c2': -1,
+                    'c3': -1,
+                    'c4': -1,
+                    'c5': -1,
                     '_safe': obj['_safe'][i],
                     'is_dummy': False,
                 }
             else:
                 item = {
                     'No': -1,
-                    'xo': obj['observations'][i][0],
-                    'yo': obj['observations'][i][1],
-                    'xr': obj['observations'][i][2],
-                    'yr': obj['observations'][i][3],
-                    'action': obj['actions'][i - 1],
+                    'b1': obj['observations'][i][0],
+                    'b2': obj['observations'][i][1],
+                    'b3': obj['observations'][i][2],
+                    'b4': obj['observations'][i][3],
+                    'b5': obj['observations'][i][4],
+                    'c1': obj['actions'][i - 1][0],
+                    'c2': obj['actions'][i - 1][1],
+                    'c3': obj['actions'][i - 1][2],
+                    'c4': obj['actions'][i - 1][3],
+                    'c5': obj['actions'][i - 1][4],
                     '_safe': obj['_safe'][i],
                     'is_dummy': False,
                 }
@@ -64,9 +79,9 @@ def convert_to_traces(lines):
                 for l in k:
                     if l['is_dummy'] and j['is_dummy']:
                         l['No'] = j['No']
-                    elif l['xo'] == j['xo'] and l['yo'] == j['yo'] and \
-                            l['xr'] == j['xr'] and l['yr'] == j['yr'] and \
-                            l['action'] == j['action']:
+                    elif l['b1'] == j['b1'] and l['b2'] == j['b2'] and l['b3'] == j['b3'] and l['b4'] == j['b4'] and \
+                            l['b5'] == j['b5'] and l['c1'] == j['c1'] and l['c2'] == j['c2'] and l['c3'] == j['c3'] and \
+                            l['c4'] == j['c4'] and l['c5'] == j['c5']:
                         l['No'] = j['No']
     return converted
 
@@ -110,62 +125,81 @@ def calculate_probabilities(converted):
 
 
 def generate_prism_model(state_list):
-    f = open('ppo_moving_obstacle_64_30.prism', 'w')
+    f = open('ppo_cinderella_5_10_5_2.prism', 'w')
     data = 'dtmc\n' \
             '\n' \
-            'module MovingObstacle\n' \
+            'module Cinderella\n' \
             '\t\n' \
-            '\txo : [-1..99];\n' \
-            '\tyo : [-1..99];\n' \
-            '\txr : [-1..99];\n' \
-            '\tyr : [-1..99];\n' \
-            '\taction : [-1..4];\n' \
+            '\tb1 : [-1..99];\n' \
+            '\tb2 : [-1..99];\n' \
+            '\tb3 : [-1..99];\n' \
+            '\tb4 : [-1..99];\n' \
+            '\tb5 : [-1..99];\n' \
+            '\tc1 : [-1..99];\n' \
+            '\tc2 : [-1..99];\n' \
+            '\tc3 : [-1..99];\n' \
+            '\tc4 : [-1..99];\n' \
+            '\tc5 : [-1..99];\n' \
             '\n'
     for state in state_list:
         data += '\t[] '
-        data += '(xo = ' + str(state['xo']) + ') & (yo = ' + str(state['yo']) + \
-                ') & (xr = ' + str(state['xr']) + ') & (yr = ' + str(state['yr']) + \
-                ') & (action = ' + str(state['action']) + ') -> '
+        data += '(b1 = ' + str(state['b1']) + ') & (b2 = ' + str(state['b2']) + \
+                ') & (b3 = ' + str(state['b3']) + ') & (b4 = ' + str(state['b4']) + \
+                ') & (b5 = ' + str(state['b5']) + ') & (c1 = ' + str(state['c1']) + \
+                ') & (c2 = ' + str(state['c2']) + ') & (c3 = ' + str(state['c3']) + \
+                ') & (c4 = ' + str(state['c4']) + ') & (c5 = ' + str(state['c5']) + ') -> '
         if len(state['next']) > 0:
             for next in state['next']:
-                data += str(next['probability']) + ':(xo\' = ' + str(next['xo']) + ') & (yo\' = ' + str(next['yo']) + \
-                        ') & (xr\' = ' + str(next['xr']) + ') & (yr\' = ' + str(next['yr']) + \
-                        ') & (action\' = ' + str(next['action']) + ') + '
+                data += str(next['probability']) + ':(b1\' = ' + str(next['b1']) + ') & (b2\' = ' + str(next['b2']) + \
+                        ') & (b3\' = ' + str(next['b3']) + ') & (b4\' = ' + str(next['b4']) + \
+                        ') & (b5\' = ' + str(next['b5']) + ') & (c1\' = ' + str(next['c1']) + \
+                        ') & (c2\' = ' + str(next['c2']) + ') & (c3\' = ' + str(next['c3']) + \
+                        ') & (c4\' = ' + str(next['c4']) + ') & (c5\' = ' + str(next['c5']) + ') + '
             data = data[:-3]
             data += ';\n'
         else:
-            data += '1:(xo\' = ' + str(state['xo']) + ') & (yo\' = ' + str(state['yo']) +  \
-                    ') & (xr\' = ' + str(state['xr']) + ') & (yr\' = ' + str(state['yr']) + \
-                    ') & (action\' = ' + str(state['action']) + ')'
+            data += '1:(b1\' = ' + str(state['b1']) + ') & (b2\' = ' + str(state['b2']) +  \
+                    ') & (b3\' = ' + str(state['b3']) + ') & (b4\' = ' + str(state['b4']) + \
+                    ') & (b5\' = ' + str(state['b5']) + ') & (c1\' = ' + str(state['c1']) + \
+                    ') & (c2\' = ' + str(state['c2']) + ') & (c3\' = ' + str(state['c3']) + \
+                    ') & (c4\' = ' + str(state['c4']) + ') & (c5\' = ' + str(state['c5']) + ')'
             data += ';\n'
     data += 'endmodule\n'
     data += '\n'
     data += 'label \"safe\" = '
     for state in state_list:
         if state['_safe'] and not state['is_dummy']:
-            data += '((xo = ' + str(state['xo']) + ') & (yo = ' + str(state['yo']) + \
-                ') & (xr = ' + str(state['xr']) + ') & (yr = ' + str(state['yr']) + \
-                ') & (action = ' + str(state['action']) + ')) | '
+            data += '((b1 = ' + str(state['b1']) + ') & (b2 = ' + str(state['b2']) + \
+                ') & (b3 = ' + str(state['b3']) + ') & (b4 = ' + str(state['b4']) + \
+                ') & (b5 = ' + str(state['b5']) + ') & (c1 = ' + str(state['c1']) + \
+                ') & (c2 = ' + str(state['c2']) + ') & (c3 = ' + str(state['c3']) + \
+                ') & (c4 = ' + str(state['c4']) + ') & (c5 = ' + str(state['c5']) + ')) | '
     data = data[:-3]
     data += ';\n'
     data += 'label \"fail\" = '
     for state in state_list:
         if not state['_safe'] and not state['is_dummy']:
-            data += '((xo = ' + str(state['xo']) + ') & (yo = ' + str(state['yo']) + \
-                ') & (xr = ' + str(state['xr']) + ') & (yr = ' + str(state['yr']) + \
-                ') & (action = ' + str(state['action']) + ')) | '
+            data += '((b1 = ' + str(state['b1']) + ') & (b2 = ' + str(state['b2']) + \
+                ') & (b3 = ' + str(state['b3']) + ') & (b4 = ' + str(state['b4']) + \
+                ') & (b5 = ' + str(state['b5']) + ') & (c1 = ' + str(state['c1']) + \
+                ') & (c2 = ' + str(state['c2']) + ') & (c3 = ' + str(state['c3']) + \
+                ') & (c4 = ' + str(state['c4']) + ') & (c5 = ' + str(state['c5']) + ')) | '
     data = data[:-3]
     data += ';\n'
     for state in state_list:
         if not state['is_dummy']:
-            data += 'label \"s' + str(state['No']) + '\" = ' + '(xo = ' + str(state['xo']) + ') & (yo = ' + str(state['yo']) + \
-                ') & (xr = ' + str(state['xr']) + ') & (yr = ' + str(state['yr']) + \
-                ') & (action = ' + str(state['action']) + ');\n'
+            data += 'label \"s' + str(state['No']) + '\" = ' + '(b1 = ' + str(state['b1']) + ') & (b2 = ' + str(state['b2']) + \
+                ') & (b3 = ' + str(state['b3']) + ') & (b4 = ' + str(state['b4']) + \
+                ') & (b5 = ' + str(state['b5']) + ') & (c1 = ' + str(state['c1']) + \
+                ') & (c2 = ' + str(state['c2']) + ') & (c3 = ' + str(state['c3']) + \
+                ') & (c4 = ' + str(state['c4']) + ') & (c5 = ' + str(state['c5']) + ');\n'
     for state in state_list:
         if state['is_dummy']:
-            data += 'label \"dummy' + str(state['No']) + '\" = ' + '(xo = ' + str(state['xo']) + ') & (yo = ' + str(state['yo']) + \
-                ') & (xr = ' + str(state['xr']) + ') & (yr = ' + str(state['yr']) + \
-                ') & (action = ' + str(state['action']) + ');\n'
+            data += 'label \"dummy' + str(state['No']) + '\" = ' + '(b1 = ' + str(state['b1']) + ') & (b2 = ' + str(state['b2']) + \
+                ') & (b3 = ' + str(state['b3']) + ') & (b4 = ' + str(state['b4']) + \
+                ') & (b5 = ' + str(state['b5']) + ') & (c1 = ' + str(state['c1']) + \
+                ') & (c2 = ' + str(state['c2']) + ') & (c3 = ' + str(state['c3']) + \
+                ') & (c4 = ' + str(state['c4']) + ') & (c5 = ' + str(state['c5']) + ');\n'
     data += '\n'
     data += 'rewards "step"\n'
     data += '\t[] true : 1;\n'

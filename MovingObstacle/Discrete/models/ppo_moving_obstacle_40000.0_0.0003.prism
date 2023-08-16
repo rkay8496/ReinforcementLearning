@@ -1,0 +1,84 @@
+dtmc
+
+module MovingObstacle
+	
+	xo : [-1..99];
+	yo : [-1..99];
+	xr : [-1..99];
+	yr : [-1..99];
+	action : [-1..4];
+
+	[] (xo = 6) & (yo = 6) & (xr = 0) & (yr = 0) & (action = -1) -> 100/200:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 44/200:(xo' = 6) & (yo' = 6) & (xr' = 1) & (yr' = 0) & (action' = 2) + 56/200:(xo' = 5) & (yo' = 5) & (xr' = 1) & (yr' = 0) & (action' = 2);
+	[] (xo = -1) & (yo = -1) & (xr = -1) & (yr = -1) & (action = -1) -> 100/2000:(xo' = 6) & (yo' = 6) & (xr' = 0) & (yr' = 0) & (action' = -1) + 44/2000:(xo' = 6) & (yo' = 6) & (xr' = 1) & (yr' = 0) & (action' = 2) + 100/2000:(xo' = 5) & (yo' = 5) & (xr' = 2) & (yr' = 0) & (action' = 2) + 72/2000:(xo' = 4) & (yo' = 4) & (xr' = 3) & (yr' = 0) & (action' = 2) + 100/2000:(xo' = 4) & (yo' = 4) & (xr' = 4) & (yr' = 0) & (action' = 2) + 86/2000:(xo' = 5) & (yo' = 3) & (xr' = 5) & (yr' = 0) & (action' = 2) + 100/2000:(xo' = 5) & (yo' = 3) & (xr' = 6) & (yr' = 0) & (action' = 2) + 91/2000:(xo' = 6) & (yo' = 2) & (xr' = 7) & (yr' = 0) & (action' = 2) + 100/2000:(xo' = 6) & (yo' = 2) & (xr' = 6) & (yr' = 0) & (action' = 1) + 95/2000:(xo' = 5) & (yo' = 1) & (xr' = 5) & (yr' = 0) & (action' = 1) + 100/2000:(xo' = 5) & (yo' = 1) & (xr' = 4) & (yr' = 0) & (action' = 1) + 96/2000:(xo' = 4) & (yo' = 0) & (xr' = 3) & (yr' = 0) & (action' = 1) + 100/2000:(xo' = 4) & (yo' = 0) & (xr' = 2) & (yr' = 0) & (action' = 1) + 98/2000:(xo' = 3) & (yo' = 0) & (xr' = 1) & (yr' = 0) & (action' = 1) + 100/2000:(xo' = 3) & (yo' = 0) & (xr' = 0) & (yr' = 0) & (action' = 1) + 99/2000:(xo' = 2) & (yo' = 1) & (xr' = 0) & (yr' = 1) & (action' = 4) + 99/2000:(xo' = 2) & (yo' = 1) & (xr' = 0) & (yr' = 2) & (action' = 4) + 99/2000:(xo' = 1) & (yo' = 2) & (xr' = 0) & (yr' = 3) & (action' = 4) + 99/2000:(xo' = 1) & (yo' = 2) & (xr' = 0) & (yr' = 2) & (action' = 3) + 99/2000:(xo' = 0) & (yo' = 1) & (xr' = 0) & (yr' = 1) & (action' = 3) + 56/2000:(xo' = 5) & (yo' = 5) & (xr' = 1) & (yr' = 0) & (action' = 2) + 28/2000:(xo' = 5) & (yo' = 5) & (xr' = 3) & (yr' = 0) & (action' = 2) + 14/2000:(xo' = 4) & (yo' = 4) & (xr' = 5) & (yr' = 0) & (action' = 2) + 9/2000:(xo' = 5) & (yo' = 3) & (xr' = 7) & (yr' = 0) & (action' = 2) + 5/2000:(xo' = 6) & (yo' = 2) & (xr' = 5) & (yr' = 0) & (action' = 1) + 4/2000:(xo' = 5) & (yo' = 1) & (xr' = 3) & (yr' = 0) & (action' = 1) + 2/2000:(xo' = 4) & (yo' = 0) & (xr' = 1) & (yr' = 0) & (action' = 1) + 1/2000:(xo' = 3) & (yo' = 0) & (xr' = 0) & (yr' = 1) & (action' = 4) + 1/2000:(xo' = 2) & (yo' = 0) & (xr' = 0) & (yr' = 0) & (action' = 3) + 1/2000:(xo' = 1) & (yo' = 1) & (xr' = 0) & (yr' = 1) & (action' = 4) + 1/2000:(xo' = 1) & (yo' = 1) & (xr' = 0) & (yr' = 0) & (action' = 3) + 1/2000:(xo' = 0) & (yo' = 1) & (xr' = 0) & (yr' = 1) & (action' = 4);
+	[] (xo = 6) & (yo = 6) & (xr = 1) & (yr = 0) & (action = 2) -> 44/88:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 44/88:(xo' = 5) & (yo' = 5) & (xr' = 2) & (yr' = 0) & (action' = 2);
+	[] (xo = 5) & (yo = 5) & (xr = 2) & (yr = 0) & (action = 2) -> 100/200:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 72/200:(xo' = 4) & (yo' = 4) & (xr' = 3) & (yr' = 0) & (action' = 2) + 28/200:(xo' = 5) & (yo' = 5) & (xr' = 3) & (yr' = 0) & (action' = 2);
+	[] (xo = 4) & (yo = 4) & (xr = 3) & (yr = 0) & (action = 2) -> 72/144:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 72/144:(xo' = 4) & (yo' = 4) & (xr' = 4) & (yr' = 0) & (action' = 2);
+	[] (xo = 4) & (yo = 4) & (xr = 4) & (yr = 0) & (action = 2) -> 100/200:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 86/200:(xo' = 5) & (yo' = 3) & (xr' = 5) & (yr' = 0) & (action' = 2) + 14/200:(xo' = 4) & (yo' = 4) & (xr' = 5) & (yr' = 0) & (action' = 2);
+	[] (xo = 5) & (yo = 3) & (xr = 5) & (yr = 0) & (action = 2) -> 86/172:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 86/172:(xo' = 5) & (yo' = 3) & (xr' = 6) & (yr' = 0) & (action' = 2);
+	[] (xo = 5) & (yo = 3) & (xr = 6) & (yr = 0) & (action = 2) -> 100/200:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 91/200:(xo' = 6) & (yo' = 2) & (xr' = 7) & (yr' = 0) & (action' = 2) + 9/200:(xo' = 5) & (yo' = 3) & (xr' = 7) & (yr' = 0) & (action' = 2);
+	[] (xo = 6) & (yo = 2) & (xr = 7) & (yr = 0) & (action = 2) -> 91/182:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 91/182:(xo' = 6) & (yo' = 2) & (xr' = 6) & (yr' = 0) & (action' = 1);
+	[] (xo = 6) & (yo = 2) & (xr = 6) & (yr = 0) & (action = 1) -> 100/200:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 95/200:(xo' = 5) & (yo' = 1) & (xr' = 5) & (yr' = 0) & (action' = 1) + 5/200:(xo' = 6) & (yo' = 2) & (xr' = 5) & (yr' = 0) & (action' = 1);
+	[] (xo = 5) & (yo = 1) & (xr = 5) & (yr = 0) & (action = 1) -> 95/190:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 95/190:(xo' = 5) & (yo' = 1) & (xr' = 4) & (yr' = 0) & (action' = 1);
+	[] (xo = 5) & (yo = 1) & (xr = 4) & (yr = 0) & (action = 1) -> 100/200:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 96/200:(xo' = 4) & (yo' = 0) & (xr' = 3) & (yr' = 0) & (action' = 1) + 4/200:(xo' = 5) & (yo' = 1) & (xr' = 3) & (yr' = 0) & (action' = 1);
+	[] (xo = 4) & (yo = 0) & (xr = 3) & (yr = 0) & (action = 1) -> 96/192:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 96/192:(xo' = 4) & (yo' = 0) & (xr' = 2) & (yr' = 0) & (action' = 1);
+	[] (xo = 4) & (yo = 0) & (xr = 2) & (yr = 0) & (action = 1) -> 100/200:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 98/200:(xo' = 3) & (yo' = 0) & (xr' = 1) & (yr' = 0) & (action' = 1) + 2/200:(xo' = 4) & (yo' = 0) & (xr' = 1) & (yr' = 0) & (action' = 1);
+	[] (xo = 3) & (yo = 0) & (xr = 1) & (yr = 0) & (action = 1) -> 98/196:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 98/196:(xo' = 3) & (yo' = 0) & (xr' = 0) & (yr' = 0) & (action' = 1);
+	[] (xo = 3) & (yo = 0) & (xr = 0) & (yr = 0) & (action = 1) -> 100/200:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 99/200:(xo' = 2) & (yo' = 1) & (xr' = 0) & (yr' = 1) & (action' = 4) + 1/200:(xo' = 3) & (yo' = 0) & (xr' = 0) & (yr' = 1) & (action' = 4);
+	[] (xo = 2) & (yo = 1) & (xr = 0) & (yr = 1) & (action = 4) -> 99/198:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 99/198:(xo' = 2) & (yo' = 1) & (xr' = 0) & (yr' = 2) & (action' = 4);
+	[] (xo = 2) & (yo = 1) & (xr = 0) & (yr = 2) & (action = 4) -> 99/198:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 99/198:(xo' = 1) & (yo' = 2) & (xr' = 0) & (yr' = 3) & (action' = 4);
+	[] (xo = 1) & (yo = 2) & (xr = 0) & (yr = 3) & (action = 4) -> 99/198:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 99/198:(xo' = 1) & (yo' = 2) & (xr' = 0) & (yr' = 2) & (action' = 3);
+	[] (xo = 1) & (yo = 2) & (xr = 0) & (yr = 2) & (action = 3) -> 99/198:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 99/198:(xo' = 0) & (yo' = 1) & (xr' = 0) & (yr' = 1) & (action' = 3);
+	[] (xo = 0) & (yo = 1) & (xr = 0) & (yr = 1) & (action = 3) -> 99/99:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1);
+	[] (xo = 5) & (yo = 5) & (xr = 1) & (yr = 0) & (action = 2) -> 56/112:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 56/112:(xo' = 5) & (yo' = 5) & (xr' = 2) & (yr' = 0) & (action' = 2);
+	[] (xo = 5) & (yo = 5) & (xr = 3) & (yr = 0) & (action = 2) -> 28/56:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 28/56:(xo' = 4) & (yo' = 4) & (xr' = 4) & (yr' = 0) & (action' = 2);
+	[] (xo = 4) & (yo = 4) & (xr = 5) & (yr = 0) & (action = 2) -> 14/28:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 14/28:(xo' = 5) & (yo' = 3) & (xr' = 6) & (yr' = 0) & (action' = 2);
+	[] (xo = 5) & (yo = 3) & (xr = 7) & (yr = 0) & (action = 2) -> 9/18:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 9/18:(xo' = 6) & (yo' = 2) & (xr' = 6) & (yr' = 0) & (action' = 1);
+	[] (xo = 6) & (yo = 2) & (xr = 5) & (yr = 0) & (action = 1) -> 5/10:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 5/10:(xo' = 5) & (yo' = 1) & (xr' = 4) & (yr' = 0) & (action' = 1);
+	[] (xo = 5) & (yo = 1) & (xr = 3) & (yr = 0) & (action = 1) -> 4/8:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 4/8:(xo' = 4) & (yo' = 0) & (xr' = 2) & (yr' = 0) & (action' = 1);
+	[] (xo = 4) & (yo = 0) & (xr = 1) & (yr = 0) & (action = 1) -> 2/4:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 2/4:(xo' = 3) & (yo' = 0) & (xr' = 0) & (yr' = 0) & (action' = 1);
+	[] (xo = 3) & (yo = 0) & (xr = 0) & (yr = 1) & (action = 4) -> 1/2:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 1/2:(xo' = 2) & (yo' = 0) & (xr' = 0) & (yr' = 0) & (action' = 3);
+	[] (xo = 2) & (yo = 0) & (xr = 0) & (yr = 0) & (action = 3) -> 1/2:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 1/2:(xo' = 1) & (yo' = 1) & (xr' = 0) & (yr' = 1) & (action' = 4);
+	[] (xo = 1) & (yo = 1) & (xr = 0) & (yr = 1) & (action = 4) -> 1/2:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 1/2:(xo' = 1) & (yo' = 1) & (xr' = 0) & (yr' = 0) & (action' = 3);
+	[] (xo = 1) & (yo = 1) & (xr = 0) & (yr = 0) & (action = 3) -> 1/2:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 1/2:(xo' = 0) & (yo' = 1) & (xr' = 0) & (yr' = 1) & (action' = 4);
+	[] (xo = 0) & (yo = 1) & (xr = 0) & (yr = 1) & (action = 4) -> 1/1:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1);
+endmodule
+
+label "safe" = ((xo = 6) & (yo = 6) & (xr = 0) & (yr = 0) & (action = -1)) | ((xo = 6) & (yo = 6) & (xr = 1) & (yr = 0) & (action = 2)) | ((xo = 5) & (yo = 5) & (xr = 2) & (yr = 0) & (action = 2)) | ((xo = 4) & (yo = 4) & (xr = 3) & (yr = 0) & (action = 2)) | ((xo = 4) & (yo = 4) & (xr = 4) & (yr = 0) & (action = 2)) | ((xo = 5) & (yo = 3) & (xr = 5) & (yr = 0) & (action = 2)) | ((xo = 5) & (yo = 3) & (xr = 6) & (yr = 0) & (action = 2)) | ((xo = 6) & (yo = 2) & (xr = 7) & (yr = 0) & (action = 2)) | ((xo = 6) & (yo = 2) & (xr = 6) & (yr = 0) & (action = 1)) | ((xo = 5) & (yo = 1) & (xr = 5) & (yr = 0) & (action = 1)) | ((xo = 5) & (yo = 1) & (xr = 4) & (yr = 0) & (action = 1)) | ((xo = 4) & (yo = 0) & (xr = 3) & (yr = 0) & (action = 1)) | ((xo = 4) & (yo = 0) & (xr = 2) & (yr = 0) & (action = 1)) | ((xo = 3) & (yo = 0) & (xr = 1) & (yr = 0) & (action = 1)) | ((xo = 3) & (yo = 0) & (xr = 0) & (yr = 0) & (action = 1)) | ((xo = 2) & (yo = 1) & (xr = 0) & (yr = 1) & (action = 4)) | ((xo = 2) & (yo = 1) & (xr = 0) & (yr = 2) & (action = 4)) | ((xo = 1) & (yo = 2) & (xr = 0) & (yr = 3) & (action = 4)) | ((xo = 1) & (yo = 2) & (xr = 0) & (yr = 2) & (action = 3)) | ((xo = 5) & (yo = 5) & (xr = 1) & (yr = 0) & (action = 2)) | ((xo = 5) & (yo = 5) & (xr = 3) & (yr = 0) & (action = 2)) | ((xo = 4) & (yo = 4) & (xr = 5) & (yr = 0) & (action = 2)) | ((xo = 5) & (yo = 3) & (xr = 7) & (yr = 0) & (action = 2)) | ((xo = 6) & (yo = 2) & (xr = 5) & (yr = 0) & (action = 1)) | ((xo = 5) & (yo = 1) & (xr = 3) & (yr = 0) & (action = 1)) | ((xo = 4) & (yo = 0) & (xr = 1) & (yr = 0) & (action = 1)) | ((xo = 3) & (yo = 0) & (xr = 0) & (yr = 1) & (action = 4)) | ((xo = 2) & (yo = 0) & (xr = 0) & (yr = 0) & (action = 3)) | ((xo = 1) & (yo = 1) & (xr = 0) & (yr = 1) & (action = 4)) | ((xo = 1) & (yo = 1) & (xr = 0) & (yr = 0) & (action = 3));
+label "fail" = ((xo = 0) & (yo = 1) & (xr = 0) & (yr = 1) & (action = 3)) | ((xo = 0) & (yo = 1) & (xr = 0) & (yr = 1) & (action = 4));
+label "s0" = (xo = 6) & (yo = 6) & (xr = 0) & (yr = 0) & (action = -1);
+label "s2" = (xo = 6) & (yo = 6) & (xr = 1) & (yr = 0) & (action = 2);
+label "s3" = (xo = 5) & (yo = 5) & (xr = 2) & (yr = 0) & (action = 2);
+label "s4" = (xo = 4) & (yo = 4) & (xr = 3) & (yr = 0) & (action = 2);
+label "s5" = (xo = 4) & (yo = 4) & (xr = 4) & (yr = 0) & (action = 2);
+label "s6" = (xo = 5) & (yo = 3) & (xr = 5) & (yr = 0) & (action = 2);
+label "s7" = (xo = 5) & (yo = 3) & (xr = 6) & (yr = 0) & (action = 2);
+label "s8" = (xo = 6) & (yo = 2) & (xr = 7) & (yr = 0) & (action = 2);
+label "s9" = (xo = 6) & (yo = 2) & (xr = 6) & (yr = 0) & (action = 1);
+label "s10" = (xo = 5) & (yo = 1) & (xr = 5) & (yr = 0) & (action = 1);
+label "s11" = (xo = 5) & (yo = 1) & (xr = 4) & (yr = 0) & (action = 1);
+label "s12" = (xo = 4) & (yo = 0) & (xr = 3) & (yr = 0) & (action = 1);
+label "s13" = (xo = 4) & (yo = 0) & (xr = 2) & (yr = 0) & (action = 1);
+label "s14" = (xo = 3) & (yo = 0) & (xr = 1) & (yr = 0) & (action = 1);
+label "s15" = (xo = 3) & (yo = 0) & (xr = 0) & (yr = 0) & (action = 1);
+label "s16" = (xo = 2) & (yo = 1) & (xr = 0) & (yr = 1) & (action = 4);
+label "s17" = (xo = 2) & (yo = 1) & (xr = 0) & (yr = 2) & (action = 4);
+label "s18" = (xo = 1) & (yo = 2) & (xr = 0) & (yr = 3) & (action = 4);
+label "s19" = (xo = 1) & (yo = 2) & (xr = 0) & (yr = 2) & (action = 3);
+label "s20" = (xo = 0) & (yo = 1) & (xr = 0) & (yr = 1) & (action = 3);
+label "s21" = (xo = 5) & (yo = 5) & (xr = 1) & (yr = 0) & (action = 2);
+label "s22" = (xo = 5) & (yo = 5) & (xr = 3) & (yr = 0) & (action = 2);
+label "s23" = (xo = 4) & (yo = 4) & (xr = 5) & (yr = 0) & (action = 2);
+label "s24" = (xo = 5) & (yo = 3) & (xr = 7) & (yr = 0) & (action = 2);
+label "s25" = (xo = 6) & (yo = 2) & (xr = 5) & (yr = 0) & (action = 1);
+label "s26" = (xo = 5) & (yo = 1) & (xr = 3) & (yr = 0) & (action = 1);
+label "s27" = (xo = 4) & (yo = 0) & (xr = 1) & (yr = 0) & (action = 1);
+label "s28" = (xo = 3) & (yo = 0) & (xr = 0) & (yr = 1) & (action = 4);
+label "s29" = (xo = 2) & (yo = 0) & (xr = 0) & (yr = 0) & (action = 3);
+label "s30" = (xo = 1) & (yo = 1) & (xr = 0) & (yr = 1) & (action = 4);
+label "s31" = (xo = 1) & (yo = 1) & (xr = 0) & (yr = 0) & (action = 3);
+label "s32" = (xo = 0) & (yo = 1) & (xr = 0) & (yr = 1) & (action = 4);
+label "dummy1" = (xo = -1) & (yo = -1) & (xr = -1) & (yr = -1) & (action = -1);
+
+rewards "step"
+	[] true : 1;
+endrewards

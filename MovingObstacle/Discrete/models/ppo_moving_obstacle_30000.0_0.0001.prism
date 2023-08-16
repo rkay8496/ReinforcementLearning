@@ -1,0 +1,46 @@
+dtmc
+
+module MovingObstacle
+	
+	xo : [-1..99];
+	yo : [-1..99];
+	xr : [-1..99];
+	yr : [-1..99];
+	action : [-1..4];
+
+	[] (xo = 6) & (yo = 6) & (xr = 0) & (yr = 0) & (action = -1) -> 100/200:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 58/200:(xo' = 5) & (yo' = 5) & (xr' = 0) & (yr' = 1) & (action' = 4) + 42/200:(xo' = 6) & (yo' = 6) & (xr' = 0) & (yr' = 1) & (action' = 4);
+	[] (xo = -1) & (yo = -1) & (xr = -1) & (yr = -1) & (action = -1) -> 100/900:(xo' = 6) & (yo' = 6) & (xr' = 0) & (yr' = 0) & (action' = -1) + 58/900:(xo' = 5) & (yo' = 5) & (xr' = 0) & (yr' = 1) & (action' = 4) + 100/900:(xo' = 5) & (yo' = 5) & (xr' = 0) & (yr' = 2) & (action' = 4) + 78/900:(xo' = 4) & (yo' = 4) & (xr' = 0) & (yr' = 3) & (action' = 4) + 100/900:(xo' = 4) & (yo' = 4) & (xr' = 0) & (yr' = 4) & (action' = 4) + 90/900:(xo' = 3) & (yo' = 5) & (xr' = 0) & (yr' = 5) & (action' = 4) + 100/900:(xo' = 3) & (yo' = 5) & (xr' = 0) & (yr' = 6) & (action' = 4) + 97/900:(xo' = 2) & (yo' = 6) & (xr' = 0) & (yr' = 7) & (action' = 4) + 100/900:(xo' = 2) & (yo' = 6) & (xr' = 0) & (yr' = 8) & (action' = 4) + 42/900:(xo' = 6) & (yo' = 6) & (xr' = 0) & (yr' = 1) & (action' = 4) + 22/900:(xo' = 5) & (yo' = 5) & (xr' = 0) & (yr' = 3) & (action' = 4) + 10/900:(xo' = 4) & (yo' = 4) & (xr' = 0) & (yr' = 5) & (action' = 4) + 3/900:(xo' = 3) & (yo' = 5) & (xr' = 0) & (yr' = 7) & (action' = 4);
+	[] (xo = 5) & (yo = 5) & (xr = 0) & (yr = 1) & (action = 4) -> 58/116:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 58/116:(xo' = 5) & (yo' = 5) & (xr' = 0) & (yr' = 2) & (action' = 4);
+	[] (xo = 5) & (yo = 5) & (xr = 0) & (yr = 2) & (action = 4) -> 100/200:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 78/200:(xo' = 4) & (yo' = 4) & (xr' = 0) & (yr' = 3) & (action' = 4) + 22/200:(xo' = 5) & (yo' = 5) & (xr' = 0) & (yr' = 3) & (action' = 4);
+	[] (xo = 4) & (yo = 4) & (xr = 0) & (yr = 3) & (action = 4) -> 78/156:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 78/156:(xo' = 4) & (yo' = 4) & (xr' = 0) & (yr' = 4) & (action' = 4);
+	[] (xo = 4) & (yo = 4) & (xr = 0) & (yr = 4) & (action = 4) -> 100/200:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 90/200:(xo' = 3) & (yo' = 5) & (xr' = 0) & (yr' = 5) & (action' = 4) + 10/200:(xo' = 4) & (yo' = 4) & (xr' = 0) & (yr' = 5) & (action' = 4);
+	[] (xo = 3) & (yo = 5) & (xr = 0) & (yr = 5) & (action = 4) -> 90/180:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 90/180:(xo' = 3) & (yo' = 5) & (xr' = 0) & (yr' = 6) & (action' = 4);
+	[] (xo = 3) & (yo = 5) & (xr = 0) & (yr = 6) & (action = 4) -> 100/200:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 97/200:(xo' = 2) & (yo' = 6) & (xr' = 0) & (yr' = 7) & (action' = 4) + 3/200:(xo' = 3) & (yo' = 5) & (xr' = 0) & (yr' = 7) & (action' = 4);
+	[] (xo = 2) & (yo = 6) & (xr = 0) & (yr = 7) & (action = 4) -> 97/194:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 97/194:(xo' = 2) & (yo' = 6) & (xr' = 0) & (yr' = 8) & (action' = 4);
+	[] (xo = 2) & (yo = 6) & (xr = 0) & (yr = 8) & (action = 4) -> 100/100:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1);
+	[] (xo = 6) & (yo = 6) & (xr = 0) & (yr = 1) & (action = 4) -> 42/84:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 42/84:(xo' = 5) & (yo' = 5) & (xr' = 0) & (yr' = 2) & (action' = 4);
+	[] (xo = 5) & (yo = 5) & (xr = 0) & (yr = 3) & (action = 4) -> 22/44:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 22/44:(xo' = 4) & (yo' = 4) & (xr' = 0) & (yr' = 4) & (action' = 4);
+	[] (xo = 4) & (yo = 4) & (xr = 0) & (yr = 5) & (action = 4) -> 10/20:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 10/20:(xo' = 3) & (yo' = 5) & (xr' = 0) & (yr' = 6) & (action' = 4);
+	[] (xo = 3) & (yo = 5) & (xr = 0) & (yr = 7) & (action = 4) -> 3/6:(xo' = -1) & (yo' = -1) & (xr' = -1) & (yr' = -1) & (action' = -1) + 3/6:(xo' = 2) & (yo' = 6) & (xr' = 0) & (yr' = 8) & (action' = 4);
+endmodule
+
+label "safe" = ((xo = 6) & (yo = 6) & (xr = 0) & (yr = 0) & (action = -1)) | ((xo = 5) & (yo = 5) & (xr = 0) & (yr = 1) & (action = 4)) | ((xo = 5) & (yo = 5) & (xr = 0) & (yr = 2) & (action = 4)) | ((xo = 4) & (yo = 4) & (xr = 0) & (yr = 3) & (action = 4)) | ((xo = 4) & (yo = 4) & (xr = 0) & (yr = 4) & (action = 4)) | ((xo = 3) & (yo = 5) & (xr = 0) & (yr = 5) & (action = 4)) | ((xo = 3) & (yo = 5) & (xr = 0) & (yr = 6) & (action = 4)) | ((xo = 2) & (yo = 6) & (xr = 0) & (yr = 7) & (action = 4)) | ((xo = 6) & (yo = 6) & (xr = 0) & (yr = 1) & (action = 4)) | ((xo = 5) & (yo = 5) & (xr = 0) & (yr = 3) & (action = 4)) | ((xo = 4) & (yo = 4) & (xr = 0) & (yr = 5) & (action = 4)) | ((xo = 3) & (yo = 5) & (xr = 0) & (yr = 7) & (action = 4));
+label "fail" = ((xo = 2) & (yo = 6) & (xr = 0) & (yr = 8) & (action = 4));
+label "s0" = (xo = 6) & (yo = 6) & (xr = 0) & (yr = 0) & (action = -1);
+label "s2" = (xo = 5) & (yo = 5) & (xr = 0) & (yr = 1) & (action = 4);
+label "s3" = (xo = 5) & (yo = 5) & (xr = 0) & (yr = 2) & (action = 4);
+label "s4" = (xo = 4) & (yo = 4) & (xr = 0) & (yr = 3) & (action = 4);
+label "s5" = (xo = 4) & (yo = 4) & (xr = 0) & (yr = 4) & (action = 4);
+label "s6" = (xo = 3) & (yo = 5) & (xr = 0) & (yr = 5) & (action = 4);
+label "s7" = (xo = 3) & (yo = 5) & (xr = 0) & (yr = 6) & (action = 4);
+label "s8" = (xo = 2) & (yo = 6) & (xr = 0) & (yr = 7) & (action = 4);
+label "s9" = (xo = 2) & (yo = 6) & (xr = 0) & (yr = 8) & (action = 4);
+label "s10" = (xo = 6) & (yo = 6) & (xr = 0) & (yr = 1) & (action = 4);
+label "s11" = (xo = 5) & (yo = 5) & (xr = 0) & (yr = 3) & (action = 4);
+label "s12" = (xo = 4) & (yo = 4) & (xr = 0) & (yr = 5) & (action = 4);
+label "s13" = (xo = 3) & (yo = 5) & (xr = 0) & (yr = 7) & (action = 4);
+label "dummy1" = (xo = -1) & (yo = -1) & (xr = -1) & (yr = -1) & (action = -1);
+
+rewards "step"
+	[] true : 1;
+endrewards
